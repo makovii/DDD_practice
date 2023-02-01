@@ -6,8 +6,13 @@ import { CustomerDto } from './dto/customer.dto';
 export class CustomerController {
   constructor(private customerEntity: CustomerEntity) {}
 
-  @Post()
-  createCustomer(@Body() input: CustomerDto) {
-    return this.customerEntity.createCustomer(input.email, input.name);
+  @Post('/registration')
+  registrationCustomer(@Body() input: CustomerDto) {
+    return this.customerEntity.registrationCustomer(input.email, input.name, input.password);
+  }
+
+  @Get('/login')
+  loginCustomer(@Body() input: Partial<CustomerDto>) {
+    return this.customerEntity.loginCustomer(input.email, input.password);
   }
 }

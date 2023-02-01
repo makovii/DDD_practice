@@ -6,9 +6,13 @@ import { Customer, CustomerDocument } from "./customer.model";
 
 @Injectable()
 export class CustomerRepository implements ICustomerRepository {
-  constructor(@InjectModel('Customer') private customerModel: Model<CustomerDocument>) {}
+  constructor(@InjectModel('Customer') private customerModel: Model<Customer>) {}
 
-  public createCustomer(email: string, name: string): Promise<Customer> {
-    return this.customerModel.create({ email, name });
+  public async createCustomer(email: string, name: string, password: string): Promise<Customer> {
+    return this.customerModel.create({ email, name, password });
+  }
+
+  public async getCustomerByEmail(email: string): Promise<Customer> {
+    return this.customerModel.findOne({ email });
   }
 }
