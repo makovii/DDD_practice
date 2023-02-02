@@ -5,6 +5,8 @@
 # env
 .env
 
+question.md
+
 # Logs
 logs
 *.log

@@ -5,6 +5,8 @@ import * as env from 'env-var';
 import { CustomerModule } from './repository/customer/customer.module';
 import { ConfigModule } from '@nestjs/config';
 import { DomainModule } from './domain/domain.module';
+import { PainterController } from './controller/painter.controller';
+import { PainterModule } from './repository/painter/painter.module';
 
 @Module({
   imports: [
@@ -13,9 +15,13 @@ import { DomainModule } from './domain/domain.module';
     }),
     MongooseModule.forRoot(env.get('MONGO_URI').required().asString()),
     CustomerModule,
+    PainterModule,
     DomainModule,
   ],
-  controllers: [CustomerController],
+  controllers: [
+    CustomerController,
+    PainterController
+  ],
   providers: [],
 })
 export class AppModule {}
