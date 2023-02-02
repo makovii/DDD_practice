@@ -3,7 +3,7 @@ import { CustomerRepository } from "../../repository/customer/customer.repositor
 import { ICustomerEntity } from "../interface/customer.interface";
 import * as bcrypt from 'bcryptjs';
 import { ENCODING_SALT } from "src/constants";
-import { Customer } from "src/repository/customer/customer.model";
+import { Customer, CustomerDocument } from "src/repository/customer/customer.model";
 import * as Response from "src/response";
 import { JwtService } from '@nestjs/jwt';
 
@@ -34,7 +34,7 @@ export class CustomerEntity implements ICustomerEntity {
       return new UnauthorizedException(Response.WRONG_EMAIL_OR_PASS);
     }
 
-    const payload = {
+    const payload: Partial<CustomerDocument> = {
       id: customer._id,
       email: customer.email,
       currency: customer.currency

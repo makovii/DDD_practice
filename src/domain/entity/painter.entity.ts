@@ -5,13 +5,13 @@ import * as Response from "src/response";
 import { JwtService } from '@nestjs/jwt';
 import { IPainterEntity } from "../interface/painter.interface";
 import { PainterRepository } from "src/repository/painter/painter.repository";
-import { Painter } from "src/repository/painter/painter.model";
+import { Painter, PainterDocument } from "src/repository/painter/painter.model";
 
 @Injectable()
 export class PainterEntity implements IPainterEntity {
   constructor(private painterRepository: PainterRepository, private jwtService: JwtService) {}
 
-  public async registrationPainter(email: string, name: string, password: string): Promise<Painter | HttpException> {
+  public async registrationPainter(email: string, name: string, password: string): Promise<PainterDocument | HttpException> {
     const sameEmailPainter = await this.painterRepository.getPainterByEmail(email);
     if (sameEmailPainter) {
       return new HttpException(Response.SAME_EMAIL, HttpStatus.BAD_REQUEST);
@@ -34,7 +34,7 @@ export class PainterEntity implements IPainterEntity {
       return new UnauthorizedException(Response.WRONG_EMAIL_OR_PASS);
     }
 
-    const payload = {
+    const payload: Partial<PainterDocument> = {
       id: painter._id,
       email: painter.email,
       currency: painter.currency

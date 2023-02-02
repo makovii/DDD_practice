@@ -8,11 +8,11 @@ import { Customer, CustomerDocument } from "./customer.model";
 export class CustomerRepository implements ICustomerRepository {
   constructor(@InjectModel('Customer') private customerModel: Model<Customer>) {}
 
-  public async createCustomer(email: string, name: string, password: string): Promise<Customer> {
+  public async createCustomer(email: string, name: string, password: string): Promise<CustomerDocument> {
     return this.customerModel.create({ email, name, password });
   }
 
-  public async getCustomerByEmail(email: string): Promise<Customer> {
+  public async getCustomerByEmail(email: string): Promise<CustomerDocument> {
     return this.customerModel.findOne({ email });
   }
 }

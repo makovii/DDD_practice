@@ -5,9 +5,6 @@ export type PainterDocument = HydratedDocument<Painter>;
 
 @Schema({ timestamps: true })
 export class Painter {
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
-  _id: ObjectId;
   
   @Prop()
   name: string;
