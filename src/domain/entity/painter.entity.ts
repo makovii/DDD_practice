@@ -11,7 +11,56 @@ import { Painter, PainterDocument } from "src/repository/painter/painter.model";
 export class PainterEntity implements IPainterEntity {
   constructor(private painterRepository: PainterRepository, private jwtService: JwtService) {}
 
-  public async registrationPainter(email: string, name: string, password: string): Promise<PainterDocument | HttpException> {
+  _id: number
+  _name: string;
+  _email: string;
+  _balance: number;
+  _currency: string;
+  _password: string;
+
+  get id(): number {
+    return this._id;
+  }
+  set id(v: number) {
+    this._id = v;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+  set name(v: string) {
+    this._name = v;
+  }
+  
+  get email(): string {
+    return this._email;
+  }
+  set email(v: string) {
+    this._email = v;
+  }
+
+  get balance(): number {
+    return this._balance;
+  }
+  set balance(v: number) {
+    this._balance = v;
+  }
+
+  get currency(): string {
+    return this._currency;
+  }
+  set currency(v: string) {
+    this._currency = v;
+  }
+  
+  get password(): string {
+    return this._password;
+  }
+  set password(v: string) {
+    this._password = v;
+  }
+  
+  public async registrationPainter(email: string, name: string, password: string): Promise<PainterEntity | HttpException> {
     const sameEmailPainter = await this.painterRepository.getPainterByEmail(email);
     if (sameEmailPainter) {
       return new HttpException(Response.SAME_EMAIL, HttpStatus.BAD_REQUEST);

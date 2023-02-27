@@ -11,14 +11,63 @@ import { JwtService } from '@nestjs/jwt';
 export class CustomerEntity implements ICustomerEntity {
   constructor(private customerRepository: CustomerRepository, private jwtService: JwtService) {}
 
-  public async registrationCustomer(email: string, name: string, password: string): Promise<Customer | HttpException> {
-    const sameEmailCustomer = await this.customerRepository.getCustomerByEmail(email);
+  private _id: number;
+  private _name: string;
+  private _email: string;
+  private _balance: number;
+  private _currency: string;
+  private _password: string;
+
+  get id(): number {
+    return this._id;
+  }
+  set id(v: number) {
+    this._id = v;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+  set name(v: string) {
+    this._name = v;
+  }
+  
+  get email(): string {
+    return this._email;
+  }
+  set email(v: string) {
+    this._email = v;
+  }
+
+  get balance(): number {
+    return this._balance;
+  }
+  set balance(v: number) {
+    this._balance = v;
+  }
+
+  get currency(): string {
+    return this._currency;
+  }
+  set currency(v: string) {
+    this._currency = v;
+  }
+  
+  get password(): string {
+    return this._password;
+  }
+  set password(v: string) {
+    this._password = v;
+  }
+
+  public async registrationCustomer(email: string, name: string, password: string): Promise<CustomerEntity | HttpException> {
+    const sameEmailCustomer:CustomerEntity = await this.customerRepository.getCustomerByEmail(email);
     if (sameEmailCustomer) {
       return new HttpException(Response.SAME_EMAIL, HttpStatus.BAD_REQUEST);
     }
-    const hashPassword = await bcrypt.hash(password, ENCODING_SALT);
+    const hashPassword: string = await bcrypt.hash(password, ENCODING_SALT);
 
-    const customer = await this.customerRepository.createCustomer(email, name, hashPassword);
+    const customer: CustomerEntity = await this.customerRepository.createCustomer(email, name, hashPassword);
     delete customer.password;
 
     return customer;
