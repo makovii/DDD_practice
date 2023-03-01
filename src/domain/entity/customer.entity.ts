@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { CustomerRepository } from "../../repository/customer/customer.repository"
 import { ICustomerEntity } from "../interface/customer.interface";
 import * as bcrypt from 'bcryptjs';
@@ -6,10 +6,13 @@ import { ENCODING_SALT } from "src/constants";
 import { Customer, CustomerDocument } from "src/repository/customer/customer.model";
 import * as Response from "src/response";
 import { JwtService } from '@nestjs/jwt';
+import { ICustomerRepository } from "src/repository/customer/customer.interface";
+
+const CustomerRepo = () => Inject('CustomerRepo');
 
 @Injectable()
 export class CustomerEntity implements ICustomerEntity {
-  constructor(private customerRepository: CustomerRepository, private jwtService: JwtService) {}
+  constructor(@CustomerRepo() private customerRepository: ICustomerRepository, private jwtService: JwtService) {}
 
   private _id: number;
   private _name: string;
@@ -61,7 +64,7 @@ export class CustomerEntity implements ICustomerEntity {
   }
 
   public async registrationCustomer(email: string, name: string, password: string): Promise<CustomerEntity | HttpException> {
-    const sameEmailCustomer:CustomerEntity = await this.customerRepository.getCustomerByEmail(email);
+    const sameEmailCustomer: CustomerEntity = await this.customerRepository.getCustomerByEmail(email);
     if (sameEmailCustomer) {
       return new HttpException(Response.SAME_EMAIL, HttpStatus.BAD_REQUEST);
     }

@@ -18,7 +18,7 @@ export class CustomerRepository implements ICustomerRepository {
     return entity;
   }
 
-  public async getCustomerByEmail(email: string): Promise<CustomerEntity> | null{
+  public async getCustomerByEmail(email: string): Promise<CustomerEntity> | null {
     const newUser: CustomerDocument | null = await this.customerModel.findOne({ email });
     if (newUser === null) return null;
     const entity = CustomerMapper.RepositoryToEntity(newUser, this);
