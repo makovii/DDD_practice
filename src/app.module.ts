@@ -4,10 +4,10 @@ import { CustomerController } from './customer/controller/customer.controller';
 import * as env from 'env-var';
 import { ConfigModule } from '@nestjs/config';
 import { PainterController } from './painter/controller/painter.controller';
-import { CustomerEntModule } from './customer/entity/customerEnt.module';
-import { CustomerRepModule } from './customer/repository/customer.module';
-import { PainterRepModule } from './painter/repository/painterRep.module';
-import { PainterEntModule } from './painter/entity/painterEnt.module';
+import { CustomerModule } from './customer/customer.module';
+import { PainterModule } from './painter/painter.module';
+import { AuthController } from './auth/controller/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,10 +15,12 @@ import { PainterEntModule } from './painter/entity/painterEnt.module';
       envFilePath: `.env`,
     }),
     MongooseModule.forRoot(env.get('MONGO_URI').required().asString()),
-    CustomerRepModule, CustomerEntModule,
-    PainterRepModule, PainterEntModule,
+    CustomerModule,
+    PainterModule,
+    AuthModule,
   ],
   controllers: [
+    AuthController,
     CustomerController,
     PainterController
   ],

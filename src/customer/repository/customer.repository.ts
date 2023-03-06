@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Document, Model, Types } from "mongoose";
 import { CustomerEntity } from "../entity/customer.entity";
-import { ICustomerRepository } from "./customer.interface";
+import { ICustomerRepository } from "../interface/repository.interface";
 import { CustomerMapper } from "../customer.mapper";
 import { Customer, CustomerDocument } from "./customer.model";
 
@@ -10,18 +10,17 @@ import { Customer, CustomerDocument } from "./customer.model";
 export class CustomerRepository implements ICustomerRepository {
   constructor(@InjectModel('Customer') private customerModel: Model<Customer>) {}
 
-  public async createCustomer(email: string, name: string, password: string): Promise<CustomerEntity> {
-    const newUser = await this.customerModel.create({ email, name, password });
-    const entity = CustomerMapper.RepositoryToEntity(newUser, this);
+  async getMe(id: string): Promise<CustomerEntity> {
+    let newCustomer;
+    
+    let exist = await this.customerModel.findOne({ auth_id: id });
+    if (!exist) {
+      newCustomer = await this.customerModel.create({ auth_id: id })
+    } else {
+      newCustomer = exist;
+    }
 
-    return entity;
-  }
-
-  public async getCustomerByEmail(email: string): Promise<CustomerEntity> | null {
-    const newUser: CustomerDocument | null = await this.customerModel.findOne({ email });
-    if (newUser === null) return null;
-    const entity = CustomerMapper.RepositoryToEntity(newUser, this);
-
-    return entity;
+    const customer = CustomerMapper.RepositoryToEntity(newCustomer, this);
+    return customer;
   }
 }

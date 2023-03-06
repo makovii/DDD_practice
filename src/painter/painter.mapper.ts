@@ -1,4 +1,5 @@
 import { JwtService } from "@nestjs/jwt";
+import { UserFromJwt } from "src/userFromJwt";
 import { PainterDto } from "./controller/dto/painter.dto";
 import { PainterEntity } from "./entity/painter.entity";
 import { PainterDocument } from "./repository/painter.model";
@@ -6,25 +7,23 @@ import { PainterRepository } from "./repository/painter.repository";
 
 export class PainterMapper {
   static RepositoryToEntity(origin: PainterDocument, context: PainterRepository) {
-    const newPainter = new PainterEntity(context, new JwtService);
+    const newPainter = new PainterEntity(context);
 
     newPainter.id = origin.id;
-    newPainter.name = origin.name;
-    newPainter.email = origin.email;
+    newPainter.auth_id = origin.auth_id;
     newPainter.currency = origin.currency;
     newPainter.balance = origin.balance;
-    newPainter.password= origin.password;
 
     return newPainter;
   }
 
-  public static EntityToDto(origin: PainterEntity): PainterDto {
+  public static EntityToDto(origin: PainterEntity, userJwt: UserFromJwt): PainterDto {
     const dto = new PainterDto();
-    dto.name = origin.name;
-    dto.email = origin.email;
+    dto.auth_id = origin.auth_id;
     dto.balance = origin.balance;
     dto.currency = origin.currency;
-    dto.password = origin.password;
+    dto.name = userJwt.name;
+    dto.email = userJwt.email;
 
     return dto;
   }

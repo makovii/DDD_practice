@@ -1,23 +1,20 @@
-import { Body, Controller, Get, HttpException, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { CustomerEntity } from '../entity/customer.entity';
 import { CustomerMapper } from '../customer.mapper';
 import { CustomerDto } from './dto/customer.dto';
+import { JwtAuthGuard } from '../jwt-auth.guard';
+import { UserFromJwt } from 'src/userFromJwt';
 
 @Controller('customer')
 export class CustomerController {
   constructor(private customerEntity: CustomerEntity) {}
 
-  @Post('/registration')
-  async registrationCustomer(@Body() input: CustomerDto): Promise<CustomerDto | HttpException> {
-    const entity = await this.customerEntity.registrationCustomer(input.email, input.name, input.password);
-    
-    if(entity.name === "HttpException") return entity;
-    const dto: CustomerDto = CustomerMapper.EntityToDto(entity as CustomerEntity);
-    return dto;
-  }
+  @Get('/me')
+  @UseGuards(JwtAuthGuard)
+  async getMe(@Req() userJwt: any) {
+    const user = await this.customerEntity.getMe(userJwt.user.id);
 
-  @Get('/login')
-  loginCustomer(@Body() input: Partial<CustomerDto>): Promise<string | UnauthorizedException> {
-    return this.customerEntity.loginCustomer(input.email, input.password);
+    const userDto = CustomerMapper.EntityToDto(user, userJwt.user);
+    return userDto;
   }
 }

@@ -1,22 +1,23 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from 'bcryptjs';
 import { ENCODING_SALT } from "src/constants";
 import * as Response from "src/response";
 import { JwtService } from '@nestjs/jwt';
-import { IPainterEntity } from "./painter.interface";
-import { PainterRepository } from "../repository/painter.repository";
+import { IPainterEntity } from "../interface/entity.interface";
 import { PainterDocument } from "../repository/painter.model";
+import { IPainterRepository } from "../interface/repository.interface";
+import { Auth } from "src/auth/repository/auth.model";
+
+const PainterRepo = () => Inject('PainterRepo');
 
 @Injectable()
 export class PainterEntity implements IPainterEntity {
-  constructor(private painterRepository: PainterRepository, private jwtService: JwtService) {}
+  constructor(@PainterRepo() private painterRepository: IPainterRepository) {}
 
-  _id: number
-  _name: string;
-  _email: string;
+  _id: number;
+  _auth_id: Auth;
   _balance: number;
   _currency: string;
-  _password: string;
 
   get id(): number {
     return this._id;
@@ -25,18 +26,11 @@ export class PainterEntity implements IPainterEntity {
     this._id = v;
   }
 
-  get name(): string {
-    return this._name;
+  get auth_id(): Auth {
+    return this._auth_id;
   }
-  set name(v: string) {
-    this._name = v;
-  }
-  
-  get email(): string {
-    return this._email;
-  }
-  set email(v: string) {
-    this._email = v;
+  set auth_id(v: Auth) {
+    this._auth_id = v;
   }
 
   get balance(): number {
@@ -53,42 +47,8 @@ export class PainterEntity implements IPainterEntity {
     this._currency = v;
   }
   
-  get password(): string {
-    return this._password;
-  }
-  set password(v: string) {
-    this._password = v;
-  }
-  
-  public async registrationPainter(email: string, name: string, password: string): Promise<PainterEntity | HttpException> {
-    const sameEmailPainter = await this.painterRepository.getPainterByEmail(email);
-    if (sameEmailPainter) {
-      return new HttpException(Response.SAME_EMAIL, HttpStatus.BAD_REQUEST);
-    }
-    const hashPassword = await bcrypt.hash(password, ENCODING_SALT);
-
-    const painter = await this.painterRepository.createPainter(email, name, hashPassword);
-    delete painter.password;
-
-    return painter;
+  async getMe(id: string): Promise<PainterEntity> {
+    return await this.painterRepository.getMe(id);
   }
 
-  public async loginPainter(email: string, password: string): Promise<string | UnauthorizedException> {
-    const painter = await this.painterRepository.getPainterByEmail(email);
-    if (!painter) {
-      return new UnauthorizedException(Response.WRONG_EMAIL_OR_PASS);
-    }
-    const passwordEqual = await bcrypt.compare(password, painter.password);
-    if (!passwordEqual) {
-      return new UnauthorizedException(Response.WRONG_EMAIL_OR_PASS);
-    }
-
-    const payload: Partial<PainterDocument> = {
-      id: painter._id,
-      email: painter.email,
-      currency: painter.currency
-    };
-
-    return this.jwtService.sign(payload)
-  }
 }

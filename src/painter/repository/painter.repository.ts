@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { PainterEntity } from "../entity/painter.entity";
 import { PainterMapper } from "../painter.mapper";
-import { IPainterRepository } from "./painter.interface";
+import { IPainterRepository } from "../interface/repository.interface";
 import { Painter, PainterDocument } from "./painter.model";
 
 
@@ -11,18 +11,17 @@ import { Painter, PainterDocument } from "./painter.model";
 export class PainterRepository implements IPainterRepository {
   constructor(@InjectModel('Painter') private painterModel: Model<Painter>) {}
 
-  public async createPainter(email: string, name: string, password: string): Promise<PainterEntity> {
-    const newPainter =  await this.painterModel.create({ email, name, password });
-    const entity = PainterMapper.RepositoryToEntity(newPainter, this);
+  async getMe(id: string): Promise<PainterEntity> {
+    let newCustomer;
+    
+    let exist = await this.painterModel.findOne({ auth_id: id });
+    if (!exist) {
+      newCustomer = await this.painterModel.create({ auth_id: id })
+    } else {
+      newCustomer = exist;
+    }
 
-    return entity;
-  }
-
-  public async getPainterByEmail(email: string): Promise<PainterEntity> {
-    const newPainter: PainterDocument | null = await this.painterModel.findOne({ email });
-    if (newPainter === null) return null;
-    const entity = PainterMapper.RepositoryToEntity(newPainter, this);
-
-    return entity;
+    const customer = PainterMapper.RepositoryToEntity(newCustomer, this);
+    return customer;
   }
 }
