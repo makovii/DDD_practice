@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { PainterEntity } from "src/domain/entity/painter.entity";
-import { PainterMapper } from "src/mappers/painter.mapper";
+import { PainterEntity } from "../entity/painter.entity";
+import { PainterMapper } from "../painter.mapper";
 import { IPainterRepository } from "./painter.interface";
 import { Painter, PainterDocument } from "./painter.model";
 

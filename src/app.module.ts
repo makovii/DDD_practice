@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CustomerController } from './controller/customer.controller';
+import { CustomerController } from './customer/controller/customer.controller';
 import * as env from 'env-var';
-import { CustomerModule } from './repository/customer/customer.module';
 import { ConfigModule } from '@nestjs/config';
-import { DomainModule } from './domain/domain.module';
-import { PainterController } from './controller/painter.controller';
-import { PainterModule } from './repository/painter/painter.module';
+import { PainterController } from './painter/controller/painter.controller';
+import { CustomerEntModule } from './customer/entity/customerEnt.module';
+import { CustomerRepModule } from './customer/repository/customer.module';
+import { PainterRepModule } from './painter/repository/painterRep.module';
+import { PainterEntModule } from './painter/entity/painterEnt.module';
 
 @Module({
   imports: [
@@ -14,9 +15,8 @@ import { PainterModule } from './repository/painter/painter.module';
       envFilePath: `.env`,
     }),
     MongooseModule.forRoot(env.get('MONGO_URI').required().asString()),
-    CustomerModule,
-    PainterModule,
-    DomainModule,
+    CustomerRepModule, CustomerEntModule,
+    PainterRepModule, PainterEntModule,
   ],
   controllers: [
     CustomerController,

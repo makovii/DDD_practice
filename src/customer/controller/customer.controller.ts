@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpException, Post, UnauthorizedException } from '@nestjs/common';
-import { CustomerEntity } from 'src/domain/entity/customer.entity';
-import { CustomerMapper } from 'src/mappers/customer.mapper';
+import { CustomerEntity } from '../entity/customer.entity';
+import { CustomerMapper } from '../customer.mapper';
 import { CustomerDto } from './dto/customer.dto';
 
 @Controller('customer')

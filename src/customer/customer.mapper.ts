@@ -1,9 +1,8 @@
-import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { CustomerDto } from "src/controller/dto/customer.dto";
-import { CustomerEntity } from "src/domain/entity/customer.entity";
-import { CustomerDocument } from "../repository/customer/customer.model";
-import { CustomerRepository } from "../repository/customer/customer.repository";
+import { CustomerDto } from "./controller/dto/customer.dto";
+import { CustomerEntity } from "./entity/customer.entity";
+import { CustomerDocument } from "./repository/customer.model";
+import { CustomerRepository } from "./repository/customer.repository";
 
 export class CustomerMapper {
   public static RepositoryToEntity(origin: CustomerDocument, context: CustomerRepository): CustomerEntity {

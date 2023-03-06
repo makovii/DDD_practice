@@ -9,4 +9,4 @@ import { PainterRepository } from './painter.repository';
   providers: [PainterRepository],
   exports: [PainterRepository],
 })
-export class PainterModule {}
+export class PainterRepModule {}

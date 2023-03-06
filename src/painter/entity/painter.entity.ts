@@ -3,9 +3,9 @@ import * as bcrypt from 'bcryptjs';
 import { ENCODING_SALT } from "src/constants";
 import * as Response from "src/response";
 import { JwtService } from '@nestjs/jwt';
-import { IPainterEntity } from "../interface/painter.interface";
-import { PainterRepository } from "src/repository/painter/painter.repository";
-import { Painter, PainterDocument } from "src/repository/painter/painter.model";
+import { IPainterEntity } from "./painter.interface";
+import { PainterRepository } from "../repository/painter.repository";
+import { PainterDocument } from "../repository/painter.model";
 
 @Injectable()
 export class PainterEntity implements IPainterEntity {

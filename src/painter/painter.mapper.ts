@@ -1,8 +1,8 @@
 import { JwtService } from "@nestjs/jwt";
-import { PainterDto } from "src/controller/dto/painter.dto";
-import { PainterEntity } from "src/domain/entity/painter.entity";
-import { PainterDocument } from "src/repository/painter/painter.model";
-import { PainterRepository } from "src/repository/painter/painter.repository";
+import { PainterDto } from "./controller/dto/painter.dto";
+import { PainterEntity } from "./entity/painter.entity";
+import { PainterDocument } from "./repository/painter.model";
+import { PainterRepository } from "./repository/painter.repository";
 
 export class PainterMapper {
   static RepositoryToEntity(origin: PainterDocument, context: PainterRepository) {

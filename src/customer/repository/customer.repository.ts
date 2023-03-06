@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { CustomerEntity } from "src/domain/entity/customer.entity";
+import { CustomerEntity } from "../entity/customer.entity";
 import { ICustomerRepository } from "./customer.interface";
-import { CustomerMapper } from "../../mappers/customer.mapper";
+import { CustomerMapper } from "../customer.mapper";
 import { Customer, CustomerDocument } from "./customer.model";
 
 @Injectable()

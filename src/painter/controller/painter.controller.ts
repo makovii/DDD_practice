@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpException, Post, UnauthorizedException } from '@nestjs/common';
-import { PainterEntity } from 'src/domain/entity/painter.entity';
-import { PainterMapper } from 'src/mappers/painter.mapper';
+import { PainterEntity } from '../entity/painter.entity';
+import { PainterMapper } from '../painter.mapper';
 import { PainterDto } from './dto/painter.dto';
 
 @Controller('painter')

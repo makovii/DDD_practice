@@ -8,4 +8,4 @@ import { Customer, CustomerSchema } from './customer.model';
   providers: [CustomerRepoProvider],
   exports: [CustomerRepoProvider],
 })
-export class CustomerModule {}
+export class CustomerRepModule {}

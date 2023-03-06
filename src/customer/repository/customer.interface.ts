@@ -1,4 +1,4 @@
-import { CustomerEntity } from "src/domain/entity/customer.entity";
+import { CustomerEntity } from "../entity/customer.entity";
 
 export interface ICustomerRepository {
   createCustomer(email: string, name: string, password: string): Promise<CustomerEntity>;

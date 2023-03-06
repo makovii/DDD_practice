@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
-import { CustomerRepository } from "../../repository/customer/customer.repository"
-import { ICustomerEntity } from "../interface/customer.interface";
+import { ICustomerEntity } from "./customer.interface";
 import * as bcrypt from 'bcryptjs';
 import { ENCODING_SALT } from "src/constants";
-import { Customer, CustomerDocument } from "src/repository/customer/customer.model";
+import { CustomerDocument } from "../repository/customer.model";
 import * as Response from "src/response";
 import { JwtService } from '@nestjs/jwt';
-import { ICustomerRepository } from "src/repository/customer/customer.interface";
+import { ICustomerRepository } from "../repository/customer.interface";
 
 const CustomerRepo = () => Inject('CustomerRepo');
 
