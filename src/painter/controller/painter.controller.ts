@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpException, Post, Req, UnauthorizedException,
 import { PainterEntity } from '../entity/painter.entity';
 import { JwtAuthGuard } from '../jwt-auth.guard';
 import { PainterMapper } from '../painter.mapper';
+import { Art } from '../repository/art.model';
 import { PainterDto } from './dto/painter.dto';
 
 @Controller('painter')
@@ -15,5 +16,13 @@ export class PainterController {
 
     const userDto = PainterMapper.EntityToDto(user, userJwt.user);
     return userDto;
+  }
+
+  @Post('/createArt')
+  @UseGuards(JwtAuthGuard)
+  async createArt(@Req() userJwt: any, @Body() art: Art) {
+    const newArt = await this.painterEntity.createArt(userJwt.user.id, art);
+
+    return newArt;
   }
 }

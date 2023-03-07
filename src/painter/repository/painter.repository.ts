@@ -5,11 +5,15 @@ import { PainterEntity } from "../entity/painter.entity";
 import { PainterMapper } from "../painter.mapper";
 import { IPainterRepository } from "../interface/repository.interface";
 import { Painter, PainterDocument } from "./painter.model";
+import { Art } from "./art.model";
 
 
 @Injectable()
 export class PainterRepository implements IPainterRepository {
-  constructor(@InjectModel('Painter') private painterModel: Model<Painter>) {}
+  constructor(
+    @InjectModel('Painter') private painterModel: Model<Painter>,
+    @InjectModel('Art') private artModel: Model<Art>
+    ) {}
 
   async getMe(id: string): Promise<PainterEntity> {
     let newCustomer;
@@ -23,5 +27,15 @@ export class PainterRepository implements IPainterRepository {
 
     const customer = PainterMapper.RepositoryToEntity(newCustomer, this);
     return customer;
+  }
+
+  async createArt(painterId: string, art: Art): Promise<Art> {
+    try {
+      return await this.artModel.create({ painter_id: painterId, price: art.price, currency: art.currency });
+
+    } catch(e) {
+      console.log(e);
+    }
+    
   }
 }

@@ -7,6 +7,7 @@ import { IPainterEntity } from "../interface/entity.interface";
 import { PainterDocument } from "../repository/painter.model";
 import { IPainterRepository } from "../interface/repository.interface";
 import { Auth } from "src/auth/repository/auth.model";
+import { Art } from "../repository/art.model";
 
 const PainterRepo = () => Inject('PainterRepo');
 
@@ -49,6 +50,10 @@ export class PainterEntity implements IPainterEntity {
   
   async getMe(id: string): Promise<PainterEntity> {
     return await this.painterRepository.getMe(id);
+  }
+
+  async createArt(painterId: string, art: Art): Promise<Art> {
+    return await this.painterRepository.createArt(painterId, art)
   }
 
 }

@@ -8,12 +8,16 @@ import { JwtService } from '@nestjs/jwt';
 import { ICustomerRepository } from "../interface/repository.interface";
 import { Auth } from "src/auth/repository/auth.model";
 import { UserFromJwt } from "src/userFromJwt";
+import { CustomerService } from "../service/customer.service";
+import { Art } from "src/painter/repository/art.model";
 
 const CustomerRepo = () => Inject('CustomerRepo');
 
 @Injectable()
 export class CustomerEntity implements ICustomerEntity {
-  constructor(@CustomerRepo() private customerRepository: ICustomerRepository) {}
+  constructor(
+    @CustomerRepo() private customerRepository: ICustomerRepository,
+    private customerService: CustomerService) {}
 
   _id: number;
   _auth_id: Auth;
@@ -50,5 +54,14 @@ export class CustomerEntity implements ICustomerEntity {
 
   async getMe(id: string): Promise<CustomerEntity> {
     return await this.customerRepository.getMe(id);
+  }
+
+  async purche(user: UserFromJwt, art: Art) {
+    const customer = await this.getMe(user.id);
+    if (customer.balance < art.price) return Response.NOT_ENOUGHT_MONEY;
+
+    await this.customerService.purche(user, art);
+    customer.balance -= art.price;
+    return customer
   }
 }

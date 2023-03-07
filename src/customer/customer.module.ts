@@ -5,18 +5,15 @@ import { CustomerRepoProvider } from './repository/customer-repo.provider';
 import { Customer, CustomerSchema } from './repository/customer.model';
 import { CustomerEntity } from './entity/customer.entity';
 import * as env from 'env-var';
+import { PainterModule } from 'src/painter/painter.module';
+import { CustomerService } from './service/customer.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Customer.name, schema: CustomerSchema }]),
-    // JwtModule.register({
-    //   secret: env.get('PRIVATE_KEY').required().asString(),
-    //   signOptions: {
-    //     expiresIn: '24h',
-    //   },
-    // }),
+    PainterModule,
   ],
-  providers: [CustomerRepoProvider, CustomerEntity],
-  exports: [CustomerRepoProvider, CustomerEntity],
+  providers: [CustomerRepoProvider, CustomerEntity, CustomerService],
+  exports: [CustomerRepoProvider, CustomerEntity, CustomerService],
 })
 export class CustomerModule {}
