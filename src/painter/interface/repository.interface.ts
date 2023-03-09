@@ -5,5 +5,7 @@ import { Painter } from "../repository/painter.model";
 export interface IPainterRepository {
   getMe(id: string): Promise<PainterEntity>;
 
-  createArt(painterId: string, art: Art): Promise<Art>,
+  createArt(painterId: string, art: Art): Promise<Art>;
+  
+  updateBalance(art: Art): Promise<void>;
 }

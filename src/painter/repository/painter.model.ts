@@ -13,10 +13,10 @@ export class Painter {
   })
   auth_id: Auth;
 
-  @Prop()
+  @Prop({ default: 0})
   balance: number;
 
-  @Prop()
+  @Prop({ default: "dollar"})
   currency: string;
 
 }

@@ -56,4 +56,8 @@ export class PainterEntity implements IPainterEntity {
     return await this.painterRepository.createArt(painterId, art)
   }
 
+  async updateBalance(art: Art) {
+    this.painterRepository.updateBalance(art);
+  }
+
 }

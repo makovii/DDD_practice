@@ -16,7 +16,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(_err: never, user: any, _info: never, context: ExecutionContext) {
-
     return user
   }
 }

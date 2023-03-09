@@ -27,4 +27,13 @@ export class CustomerRepository implements ICustomerRepository {
     const customer = CustomerMapper.RepositoryToEntity(newCustomer, this, this.customerService);
     return customer;
   }
+
+  async updateBalance(id: string, currentBalance: number): Promise<void> {
+    try {
+      await this.customerModel.updateOne({ auth_id: id }, { balance: currentBalance });  
+    } catch (e) {
+      throw new Error(e);
+    }
+    
+  }
 }

@@ -60,8 +60,13 @@ export class CustomerEntity implements ICustomerEntity {
     const customer = await this.getMe(user.id);
     if (customer.balance < art.price) return Response.NOT_ENOUGHT_MONEY;
 
-    await this.customerService.purche(user, art);
-    customer.balance -= art.price;
-    return customer
+    try {
+      await this.customerService.purche(user, art);
+      await this.customerRepository.updateBalance(user.id, customer.balance - art.price);
+      customer.balance -= art.price;
+      return customer;
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 }

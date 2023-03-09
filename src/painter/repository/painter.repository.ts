@@ -36,6 +36,14 @@ export class PainterRepository implements IPainterRepository {
     } catch(e) {
       console.log(e);
     }
+  }
+
+  async updateBalance(art: Art): Promise<void> {
+    try {
+      await this.painterModel.updateOne({auth_id: art.painter_id}, { $inc: { balance: art.price }});
+    } catch (e) {
+      throw new Error(e);
+    }
     
   }
 }

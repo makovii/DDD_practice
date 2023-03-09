@@ -7,8 +7,7 @@ export class PainterService {
   constructor(private painterEntity: PainterEntity) {}
 
   async purche(art: Art) {
-    const painter = await this.painterEntity.getMe(art.painter_id);
-    painter.balance += art.price;
-    return painter
+    this.painterEntity.updateBalance(art);
+
   }
 }
